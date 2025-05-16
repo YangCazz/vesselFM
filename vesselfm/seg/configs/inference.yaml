@@ -4,9 +4,9 @@ defaults:
   - _self_
 
 # i/o
-image_path: /path/to/image_folder #TODO
+image_path: D:/yang/YangCazz/Vessels/vesselFM/data/raw #TODO
 image_file_ending: nii.gz
-output_folder: /path/to/output_folder # TODO
+output_folder: D:/yang/YangCazz/Vessels/vesselFM/data/output #TODO
 file_app: ""
 
 mask_path: null
@@ -14,7 +14,7 @@ round_to: 2
 
 # model & ckpt
 device: cuda:0
-ckpt_path: /path/to/ckpt.pt
+ckpt_path: D:\yang\YangCazz\Vessels\vesselFM\checkpoints\vesselFM_base.pt
 
 # sliding window inferer
 batch_size: 16

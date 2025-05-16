@@ -104,9 +104,14 @@ def main(cfg):
     with torch.no_grad():
         for idx, image_path in tqdm(enumerate(image_paths), total=len(image_paths), desc="Processing images."):
             preds = [] # average over test time augmentations
+            
+            # read original image and metadata
+            original_img, original_metadata = image_reader_writer.read_images(image_path)
+            
             for scale in cfg.tta.scales:
                 # apply pre-processing transforms
-                image = transforms(image_reader_writer.read_images(image_path)[0].astype(np.float32))[None].to(device)
+                # image = transforms(image_reader_writer.read_images(image_path)[0].astype(np.float32))[None].to(device)
+                image = transforms(original_img.astype(np.float32))[None].to(device) # fix
                 mask = torch.tensor(image_reader_writer.read_images(mask_paths[idx])[0]).bool() if mask_paths else None
   
                 # apply test time augmentation
@@ -139,7 +144,9 @@ def main(cfg):
 
             # save final pred
             save_writer.write_seg(
-                pred_thresh.astype(np.uint8), output_folder / f"{image_path.name.split('.')[0]}_{cfg.file_app}pred.{file_ending}"
+                pred_thresh.astype(np.uint8), 
+                output_folder / f"{image_path.name.split('.')[0]}_{cfg.file_app}pred.{file_ending}",
+                metadata=original_metadata["other"]
             )
 
             if mask_paths is not None:
